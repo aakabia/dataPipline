@@ -1,7 +1,9 @@
+const { Exercise } = require("../models");
+
 async function apiCall() {
   try {
     const response = await fetch(
-      "https://exercisedb.p.rapidapi.com/exercises?limit=5&offset=0",
+      "https://exercisedb.p.rapidapi.com/exercises?limit=30&offset=0",
       {
         method: "GET",
         headers: {
@@ -42,4 +44,15 @@ async function apiCall() {
   }
 }
 
-apiCall();
+async function seedDbWithExercise(func) {
+  try {
+    const data = await func();
+    // Note : func is async so dont forget to use await for promise.
+    await Exercise.bulkCreate(data);
+    console.log("DATABASE Seeded 🌱");
+  } catch (error) {
+    console.error("An error occured:", error);
+  }
+}
+
+module.exports = { apiCall, seedDbWithExercise };
