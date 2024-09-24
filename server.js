@@ -1,26 +1,30 @@
 const sequelize = require("./config/connection");
-const { Exercise } = require("./models");
+const express = require("express");
+const routes = require("./controllers");
 
-async function connect() {
-  try {
-    await sequelize.sync({ force: false });
-    console.log("Db synced");
+// Above are our imports for our server.
 
-    const excercises = await Exercise.findAll();
-    // Above brings our data back with lots of unncessary properties.
 
-    const exerciseCleaned = JSON.stringify(excercises, null, 2);
-    // Above, cleans up the data to include the data we want.
 
-    console.log(exerciseCleaned);
 
-    await sequelize.close();
-    console.log("Connection has been closed");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-}
 
-connect();
 
-// Above is checking my connection to my db
+const app = express();
+const PORT = process.env.PORT || 3001;
+// Above is our express instance and our port.
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(routes);
+// Above is the middleware I use for my server.
+
+
+
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () => {
+    console.log(`Example app listening at http://localhost:${PORT}`);
+  });
+});
+
+// Above, we start the server with the app.listen
