@@ -36,7 +36,7 @@ async function apiCall() {
 
     // Above is how we filter our data.
 
-    console.log(filteredData);
+    //console.log(filteredData);
 
     return filteredData;
   } catch (error) {
